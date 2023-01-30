@@ -1,0 +1,26 @@
+on:
+  release:
+    types: [released]
+  # support manual release in case something goes wrong and needs to be repeated or tested
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: tag that needs to publish
+        type: string
+        required: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: yarn lint
+      - run: yarn test
+      - run: npm install sfdx-cli -g @salesforce/plugin-release-management --omit=dev
+      - run: sf-release npm:package:release --githubtag ${{ github.event.release.tag_name }} --no-install --npmtag latest
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

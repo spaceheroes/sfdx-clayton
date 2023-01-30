@@ -1,0 +1,30 @@
+{
+  "commandDescription": {
+    "by_branch": "Run a scan of a branch",
+    "by_pull_request": "Run a scan of a pull_request",
+    "by_revision": "Run a scan of a git revision",
+    "get": "Fetch a scan report"
+  },
+  "commandExamples": {
+    "by_branch": ["sfdx clayton:scan:by_branch --workspace 123 --project 123 --branch main"],
+    "by_pull_request": ["sfdx clayton:scan:by_pull_request --workspace 123 --project 123 --pull_request_number 123"],
+    "by_revision": ["sfdx clayton:scan:by_revision --workspace 123 --project 123 --revision 123"],
+    "get": ["sfdx clayton:scan --workspace 123 --project 123 --scan 123"]
+  },
+  "flagDescriptionBranch": "branch name",
+  "flagDescriptionClientId": "Clayton client id for OAuth 2.0 authentication",
+  "flagDescriptionClientSecret": "Clayton client secret for OAuth 2.0 authentication",
+  "flagDescriptionProjectId": "unique identifier of the environment or repository",
+  "flagDescriptionPullRequestNumber": "number identifier of the pull request",
+  "flagDescriptionRefreshToken": "Clayton refresh token for OAuth 2.0 authentication",
+  "flagDescriptionRevision": "revision SHA",
+  "flagDescriptionScanId": "unique identifier of the scan",
+  "flagDescriptionWait": "timeout in minutes for waiting the scan to be processed ( minimium 5 )",
+  "flagDescriptionWorkspaceId": "unique identifier of the workspace",
+  "flagErrorMissing_client-id": "--client-id flag for Clayton client id for OAuth 2.0 authentication is required",
+  "flagErrorMissing_client-secret": "--client-secret flag for Clayton client secret for OAuth 2.0 authentication is required",
+  "flagErrorMissing_refresh-token": "--refresh-token flag for Clayton refresh token for OAuth 2.0 authentication is required",
+  "flagErrorMissing_project": "--project flag for environment or repository identifier is required",
+  "flagErrorMissing_scan": "--scan flag for scan identifier is required",
+  "flagErrorMissing_workspace": "--workspace flag for workspace identifier is required"
+}

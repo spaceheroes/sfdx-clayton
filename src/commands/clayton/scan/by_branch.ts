@@ -72,7 +72,7 @@ export default class ScanByBranch extends SfdxCommand {
 
       if (this.flags.wait) {
         ux.startSpinner('Processing scan');
-        const scan = await waitForScanStatus(accessToken, scanId)
+        const scan = await waitForScanStatus(accessToken, scanId);
         ux.stopSpinner('done');
         ux.logJson(scan as any);
         return scan;

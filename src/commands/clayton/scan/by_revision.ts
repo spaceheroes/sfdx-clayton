@@ -51,7 +51,7 @@ export default class ScanByRevision extends SfdxCommand {
         clientSecret: this.flags['client-secret'],
         refreshToken: this.flags['refresh-token'],
       });
-      const accessToken = tokenResponse?.data?.access_token
+      const accessToken = tokenResponse?.data?.access_token;
       const headers = {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export default class ScanByRevision extends SfdxCommand {
 
       if (this.flags.wait) {
         ux.startSpinner('Processing scan');
-        const scan = await waitForScanStatus(accessToken, scanId)
+        const scan = await waitForScanStatus(accessToken, scanId);
         ux.stopSpinner('done');
         ux.logJson(scan as any);
         return scan;

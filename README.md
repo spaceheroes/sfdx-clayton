@@ -15,7 +15,7 @@ $ sfdx plugins:install @spaceheroes/sfdx-clayton
 $ sfdx COMMAND
 running command...
 $ sfdx (--version)
-@spaceheroes/sfdx-clayton/0.0.1 darwin-arm64 node-v16.14.2
+@spaceheroes/sfdx-clayton/0.0.3 darwin-arm64 node-v16.14.2
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -26,8 +26,8 @@ USAGE
 <!-- commands -->
 
 - [`sfdx clayton:scan:by_branch -b <string> -p <string> -w <string> [--wait <string>] [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-claytonscanby_branch--b-string--p-string--w-string---wait-string---client-id-string---client-secret-string---refresh-token-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+- [`sfdx clayton:scan:by_branch_revision -b <string> -p <string> -r <string> -w <string> [--wait <string>] [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-claytonscanby_branch_revision--b-string--p-string--r-string--w-string---wait-string---client-id-string---client-secret-string---refresh-token-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 - [`sfdx clayton:scan:by_pull_request -p <string> -n <integer> -w <string> [--wait <string>] [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-claytonscanby_pull_request--p-string--n-integer--w-string---wait-string---client-id-string---client-secret-string---refresh-token-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-- [`sfdx clayton:scan:by_revision -p <string> -r <string> -w <string> [--wait <string>] [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-claytonscanby_revision--p-string--r-string--w-string---wait-string---client-id-string---client-secret-string---refresh-token-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 - [`sfdx clayton:scan:get -w <string> -p <string> -s <string> [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-claytonscanget--w-string--p-string--s-string---client-id-string---client-secret-string---refresh-token-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 
 ## `sfdx clayton:scan:by_branch -b <string> -p <string> -w <string> [--wait <string>] [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
@@ -65,7 +65,45 @@ EXAMPLES
   $ sfdx clayton:scan:by_branch --workspace 123 --project 123 --branch main
 ```
 
-_See code: [src/commands/clayton/scan/by_branch.ts](https://github.com/spaceheroes/sfdx-clayton/blob/v0.0.1/src/commands/clayton/scan/by_branch.ts)_
+_See code: [src/commands/clayton/scan/by_branch.ts](https://github.com/spaceheroes/sfdx-clayton/blob/v0.0.3/src/commands/clayton/scan/by_branch.ts)_
+
+## `sfdx clayton:scan:by_branch_revision -b <string> -p <string> -r <string> -w <string> [--wait <string>] [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+Run a scan of a git revision on a given branch
+
+```
+USAGE
+  $ sfdx clayton:scan:by_branch_revision -b <string> -p <string> -r <string> -w <string> [--wait <string>] [--client-id <string>]
+    [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel
+    trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+FLAGS
+  -b, --branch=<value>                                                              (required) branch name
+  -p, --project=<value>                                                             (required) unique identifier of the
+                                                                                    environment or repository
+  -r, --revision=<value>                                                            (required) revision SHA
+  -w, --workspace=<value>                                                           (required) unique identifier of the
+                                                                                    workspace
+  --client-id=<value>                                                               Clayton client id for OAuth 2.0
+                                                                                    authentication
+  --client-secret=<value>                                                           Clayton client secret for OAuth 2.0
+                                                                                    authentication
+  --json                                                                            format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+  --refresh-token=<value>                                                           Clayton refresh token for OAuth 2.0
+                                                                                    authentication
+  --wait=<value>                                                                    timeout in minutes for waiting the
+                                                                                    scan to be processed ( minimium 5 )
+
+DESCRIPTION
+  Run a scan of a git revision on a given branch
+
+EXAMPLES
+  $ sfdx clayton:scan:by_branch_revision --workspace 123 --project 123 --branch main --revision 123
+```
+
+_See code: [src/commands/clayton/scan/by_branch_revision.ts](https://github.com/spaceheroes/sfdx-clayton/blob/v0.0.3/src/commands/clayton/scan/by_branch_revision.ts)_
 
 ## `sfdx clayton:scan:by_pull_request -p <string> -n <integer> -w <string> [--wait <string>] [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -103,44 +141,7 @@ EXAMPLES
   $ sfdx clayton:scan:by_pull_request --workspace 123 --project 123 --pull_request_number 123
 ```
 
-_See code: [src/commands/clayton/scan/by_pull_request.ts](https://github.com/spaceheroes/sfdx-clayton/blob/v0.0.1/src/commands/clayton/scan/by_pull_request.ts)_
-
-## `sfdx clayton:scan:by_revision -p <string> -r <string> -w <string> [--wait <string>] [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
-
-Run a scan of a git revision
-
-```
-USAGE
-  $ sfdx clayton:scan:by_revision -p <string> -r <string> -w <string> [--wait <string>] [--client-id <string>]
-    [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel
-    trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
-
-FLAGS
-  -p, --project=<value>                                                             (required) unique identifier of the
-                                                                                    environment or repository
-  -r, --revision=<value>                                                            (required) revision SHA
-  -w, --workspace=<value>                                                           (required) unique identifier of the
-                                                                                    workspace
-  --client-id=<value>                                                               Clayton client id for OAuth 2.0
-                                                                                    authentication
-  --client-secret=<value>                                                           Clayton client secret for OAuth 2.0
-                                                                                    authentication
-  --json                                                                            format output as json
-  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
-                                                                                    this command invocation
-  --refresh-token=<value>                                                           Clayton refresh token for OAuth 2.0
-                                                                                    authentication
-  --wait=<value>                                                                    timeout in minutes for waiting the
-                                                                                    scan to be processed ( minimium 5 )
-
-DESCRIPTION
-  Run a scan of a git revision
-
-EXAMPLES
-  $ sfdx clayton:scan:by_revision --workspace 123 --project 123 --revision 123
-```
-
-_See code: [src/commands/clayton/scan/by_revision.ts](https://github.com/spaceheroes/sfdx-clayton/blob/v0.0.1/src/commands/clayton/scan/by_revision.ts)_
+_See code: [src/commands/clayton/scan/by_pull_request.ts](https://github.com/spaceheroes/sfdx-clayton/blob/v0.0.3/src/commands/clayton/scan/by_pull_request.ts)_
 
 ## `sfdx clayton:scan:get -w <string> -p <string> -s <string> [--client-id <string>] [--client-secret <string>] [--refresh-token <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -175,6 +176,6 @@ EXAMPLES
   $ sfdx clayton:scan --workspace 123 --project 123 --scan 123
 ```
 
-_See code: [src/commands/clayton/scan/get.ts](https://github.com/spaceheroes/sfdx-clayton/blob/v0.0.1/src/commands/clayton/scan/get.ts)_
+_See code: [src/commands/clayton/scan/get.ts](https://github.com/spaceheroes/sfdx-clayton/blob/v0.0.3/src/commands/clayton/scan/get.ts)_
 
 <!-- commandsstop -->

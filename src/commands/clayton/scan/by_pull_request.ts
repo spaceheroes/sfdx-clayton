@@ -4,8 +4,8 @@ import { Messages, SfError } from '@salesforce/core';
 import axios from 'axios';
 import { refreshToken } from '../../../utils/refreshToken';
 import { getErrorsIfMissingFlags, OAUTH_FLAGS_CONFIG, ProjectRelatedUrlParams, URLs } from '../../../config';
-import { Scan } from '../../../types';
-import { waitForScanStatus } from '../../../utils/waitForScanStatus';
+import { PullRequest } from '../../../types';
+import { waitForPullRequestScanStatus } from '../../../utils/waitForScanStatus';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@spaceheroes/sfdx-clayton', 'scan');
@@ -38,7 +38,7 @@ export default class ScanByPullRequest extends SfdxCommand {
     ...OAUTH_FLAGS_CONFIG,
   };
 
-  public async run(): Promise<Scan> {
+  public async run(): Promise<PullRequest> {
     const ux = this.ux;
     const errors = getErrorsIfMissingFlags(this.flags, ScanByPullRequest.flagsConfig);
     if (errors.length > 0) {
@@ -55,31 +55,39 @@ export default class ScanByPullRequest extends SfdxCommand {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       };
+      const pullRequestNumber = this.flags['pull-request-number'];
       const url = `${URLs.getScans({ ...this.flags } as ProjectRelatedUrlParams)}/by_pull_request`;
 
-      ux.startSpinner('Launching scan');
-      const lauchScanResponse = await axios.post<Scan>(
+      ux.startSpinner(`Launching scan for PR #${pullRequestNumber}`);
+      const lauchPullRequestResponse = await axios.post<PullRequest>(
         url,
         {
-          pull_request_number: this.flags['pull-request-number'],
+          pull_request_number: pullRequestNumber,
           type: 'AUTO',
         },
         { headers }
       );
-      const scanId = lauchScanResponse?.data.id;
-      ux.stopSpinner('done');
-      ux.logJson(lauchScanResponse?.data as any);
+
+      if (lauchPullRequestResponse?.data.task.status !== 'ACCEPTED') {
+        ux.stopSpinner('failed');
+        return lauchPullRequestResponse?.data;
+      } else {
+        ux.stopSpinner('done');
+        ux.logJson(lauchPullRequestResponse?.data as any);
+      }
 
       if (this.flags.wait) {
         ux.startSpinner('Processing scan');
-        const scan = await waitForScanStatus(accessToken, scanId);
+        const pullRequestId = lauchPullRequestResponse?.data.id;
+        const pullRequest = await waitForPullRequestScanStatus(accessToken, this.flags, pullRequestId);
         ux.stopSpinner('done');
-        ux.logJson(scan as any);
-        return scan;
+        ux.logJson(pullRequest as any);
+        return pullRequest;
       } else {
-        return lauchScanResponse?.data;
+        return lauchPullRequestResponse?.data;
       }
     } catch (error) {
+      ux.stopSpinner('failed');
       throw new SfError(`\n${error.code}: ${error.message}`);
     }
   }

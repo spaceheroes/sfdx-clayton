@@ -1,3 +1,128 @@
+export interface BranchLite {
+  name?: string;
+  is_processing?: boolean;
+  html_url?: string;
+  /** @enum {string} */
+  last_scan_result?: 'PASSED' | 'PASSED_WITH_WARNINGS' | 'NOT_PASSED';
+}
+export interface PullRequestMetrics {
+  /** Format: int64 */
+  violation_count?: number;
+  violation_count_by_severity?: { [key: string]: number };
+}
+export interface LegacyPullRequestReviewReport {
+  /** Format: uuid */
+  id: string;
+  from_revision?: Revision;
+  to_revision?: Revision;
+  report_policies?: PullRequestReviewReportPolicyVersionLite;
+  default_report_policy_id: string;
+  metrics?: PullRequestMetrics;
+  /** @enum {string} */
+  report_type?: 'DIFF' | 'SCAN';
+  task?: TaskLite;
+}
+export interface PullRequestReviewReportPolicyVersionLite {
+  /** Format: uuid */
+  id: string;
+  title?: string;
+  description?: string;
+  html_url?: string;
+  /** Format: int64 */
+  problems?: number;
+  problems_by_severity?: { [key: string]: number };
+  /** @enum {string} */
+  result?: 'PASSED' | 'PASSED_WITH_WARNINGS' | 'NOT_PASSED';
+  /** @enum {string} */
+  issue_details?: 'AVAILABLE' | 'PAYWALL' | 'UNAVAILABLE';
+  /** Format: double */
+  remediation_effort?: number;
+}
+export interface LegacyPullRequestReviewLite {
+  /** Format: uuid */
+  id: string;
+  /** Format: date-time */
+  created_date?: string;
+  obsolete?: boolean;
+  published?: boolean;
+  pull_request_review_report?: LegacyPullRequestReviewReport;
+}
+export interface LegacyPullRequestReviewReport {
+  /** Format: uuid */
+  id: string;
+  from_revision?: Revision;
+  to_revision?: Revision;
+  report_policies?: PullRequestReviewReportPolicyVersionLite;
+  default_report_policy_id: string;
+  metrics?: PullRequestMetrics;
+  /** @enum {string} */
+  report_type?: 'DIFF' | 'SCAN';
+  task?: TaskLite;
+}
+export interface PullRequestLite {
+  /** Format: uuid */
+  id: string;
+  /** Format: date-time */
+  created_date?: string;
+  obsolete?: boolean;
+  published?: boolean;
+}
+export interface PullRequestReviewReport {
+  /** Format: uuid */
+  id: string;
+  from_revision?: Revision;
+  to_revision?: Revision;
+  report_policies?: PullRequestReviewReportPolicyVersionLite;
+  default_report_policy_id: string;
+  metrics?: PullRequestMetrics;
+  /** @enum {string} */
+  report_type?: 'DIFF' | 'SCAN';
+  task?: TaskLite;
+  /** @enum {string} */
+  status?: 'QUEUED' | 'PROCESSING' | 'READY' | 'ERROR';
+  obsolete?: boolean;
+  last_pull_request_review?: PullRequestLite;
+  /** Format: date-time */
+  enqueued_date?: string;
+  /** Format: date-time */
+  completed_date?: string;
+  /** @enum {string} */
+  result?: 'PASSED' | 'PASSED_WITH_WARNINGS' | 'NOT_PASSED';
+}
+export interface PullRequestContributor {
+  email?: string;
+  avatar?: string;
+  /** Format: date-time */
+  last_commit_date?: string;
+}
+export interface PullRequest {
+  /** Format: uuid */
+  id: string;
+  /** Format: int32 */
+  number?: number;
+  title?: string;
+  url?: string;
+  /** Format: date-time */
+  date_opened?: string;
+  /** Format: date-time */
+  date_closed?: string;
+  opened_by?: string;
+  closed_by?: string;
+  /** @enum {string} */
+  approval?: 'PENDING' | 'APPROVED' | 'NOT_APPROVED';
+  branch_from?: BranchLite;
+  branch_to?: BranchLite;
+  html_url?: string;
+  /** @enum {string} */
+  last_comparison_result?: 'PASSED' | 'PASSED_WITH_WARNINGS' | 'NOT_PASSED';
+  is_processing?: boolean;
+  /** @enum {string} */
+  last_review_result?: 'PASSED' | 'PASSED_WITH_WARNINGS' | 'NOT_PASSED';
+  last_pull_request_review?: LegacyPullRequestReviewLite;
+  last_pull_request_review_report?: PullRequestReviewReport;
+  contributors?: PullRequestContributor[];
+  task?: TaskLite;
+}
 export interface ReportStats {
   /** Format: int64 */
   elapsed_time?: number;
@@ -11,7 +136,7 @@ export interface ReportStats {
 }
 export interface Revision {
   /** Format: uuid */
-  id?: string;
+  id: string;
   sha?: string;
   short_sha?: string;
   html_url?: string;
@@ -29,7 +154,7 @@ export interface Revision {
 }
 export interface Scan {
   /** Format: uuid */
-  id?: string;
+  id: string;
   /** @enum {string} */
   type?: 'FULL' | 'QUICK' | 'AUTO';
   html_url?: string;
@@ -55,7 +180,7 @@ export interface Scan {
   revision?: Revision;
   metrics?: ScanMetrics;
   scan_policies?: ScanPolicyLite[];
-  default_scan_policy_id?: string;
+  default_scan_policy_id: string;
   sarif_url?: string;
   task?: TaskLite;
   /** @enum {string} */
@@ -65,7 +190,7 @@ export interface Scan {
 }
 export interface ScanLite {
   /** Format: uuid */
-  id?: string;
+  id: string;
   /** Format: date-time */
   completed_date?: string;
   /** Format: int64 */
@@ -109,7 +234,7 @@ export interface ScanMetrics {
 }
 export interface ScanPolicyLite {
   /** Format: uuid */
-  id?: string;
+  id: string;
   title?: string;
   description?: string;
   html_url?: string;
@@ -131,7 +256,7 @@ export interface ScanPolicyLite {
 }
 export interface TaskLite {
   /** Format: uuid */
-  id?: string;
+  id: string;
   /** @enum {string} */
   status?: 'FUTURE' | 'THROTTLED' | 'ACCEPTED' | 'PROCESSING' | 'PROCESSED';
   /** @enum {string} */

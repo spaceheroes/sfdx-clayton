@@ -5,18 +5,23 @@ import axios from 'axios';
 import { refreshToken } from '../../../utils/refreshToken';
 import { getErrorsIfMissingFlags, OAUTH_FLAGS_CONFIG, ProjectRelatedUrlParams, URLs } from '../../../config';
 import { Scan } from '../../../types';
-import { waitForScanStatus } from '../../../utils/waitForScanStatus';
+import { waitForRevisionScanStatus } from '../../../utils/waitForScanStatus';
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@spaceheroes/sfdx-clayton', 'scan');
 
-export default class ScanByRevision extends SfdxCommand {
-  public static description = messages.getMessage('commandDescription.by_revision');
+export default class ScanByBranchAndRevision extends SfdxCommand {
+  public static description = messages.getMessage('commandDescription.by_branch_revision');
 
-  public static examples = messages.getMessage('commandExamples.by_revision').split(os.EOL);
+  public static examples = messages.getMessage('commandExamples.by_branch_revision').split(os.EOL);
 
   protected static flagsConfig = {
+    branch: flags.string({
+      char: 'b',
+      description: messages.getMessage('flagDescriptionBranch'),
+      required: true,
+    }),
     project: flags.string({
       char: 'p',
       description: messages.getMessage('flagDescriptionProjectId'),
@@ -41,7 +46,7 @@ export default class ScanByRevision extends SfdxCommand {
 
   public async run(): Promise<Scan> {
     const ux = this.ux;
-    const errors = getErrorsIfMissingFlags(this.flags, ScanByRevision.flagsConfig);
+    const errors = getErrorsIfMissingFlags(this.flags, ScanByBranchAndRevision.flagsConfig);
     if (errors.length > 0) {
       throw new SfError(errors.join(os.EOL));
     }
@@ -56,24 +61,31 @@ export default class ScanByRevision extends SfdxCommand {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       };
-      const url = `${URLs.getScans({ ...this.flags } as ProjectRelatedUrlParams)}/by_revision`;
+      const url = `${URLs.getScans({ ...this.flags } as ProjectRelatedUrlParams)}/by_branch_and_revision`;
 
-      ux.startSpinner('Launching scan');
+      ux.startSpinner(`Launching scan for ${this.flags.revision} on ${this.flags.branch}`);
       const lauchScanResponse = await axios.post<Scan>(
         url,
         {
+          branch: this.flags.branch,
           revision: this.flags.revision,
           type: 'AUTO',
         },
         { headers }
       );
-      const scanId = lauchScanResponse?.data.id;
-      ux.stopSpinner('done');
-      ux.logJson(lauchScanResponse?.data as any);
+
+      if (lauchScanResponse?.data.task.status !== 'ACCEPTED') {
+        ux.stopSpinner('failed');
+        return lauchScanResponse?.data;
+      } else {
+        ux.stopSpinner('done');
+        ux.logJson(lauchScanResponse?.data as any);
+      }
 
       if (this.flags.wait) {
         ux.startSpinner('Processing scan');
-        const scan = await waitForScanStatus(accessToken, scanId);
+        const scanId = lauchScanResponse?.data.id;
+        const scan = await waitForRevisionScanStatus(accessToken, this.flags, scanId);
         ux.stopSpinner('done');
         ux.logJson(scan as any);
         return scan;
@@ -81,6 +93,7 @@ export default class ScanByRevision extends SfdxCommand {
         return lauchScanResponse?.data;
       }
     } catch (error) {
+      ux.stopSpinner('failed');
       throw new SfError(`\n${error.code}: ${error.message}`);
     }
   }

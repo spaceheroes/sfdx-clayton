@@ -2,13 +2,15 @@
   "commandDescription": {
     "by_branch": "Run a scan of a branch",
     "by_pull_request": "Run a scan of a pull_request",
-    "by_revision": "Run a scan of a git revision",
+    "by_branch_revision": "Run a scan of a git revision on a given branch",
     "get": "Fetch a scan report"
   },
   "commandExamples": {
     "by_branch": ["sfdx clayton:scan:by_branch --workspace 123 --project 123 --branch main"],
     "by_pull_request": ["sfdx clayton:scan:by_pull_request --workspace 123 --project 123 --pull_request_number 123"],
-    "by_revision": ["sfdx clayton:scan:by_revision --workspace 123 --project 123 --revision 123"],
+    "by_branch_revision": [
+      "sfdx clayton:scan:by_branch_revision --workspace 123 --project 123 --branch main --revision 123"
+    ],
     "get": ["sfdx clayton:scan --workspace 123 --project 123 --scan 123"]
   },
   "flagDescriptionBranch": "branch name",

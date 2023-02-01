@@ -1,7 +1,7 @@
 {
   "name": "@spaceheroes/sfdx-clayton",
   "description": "SFDX plugin to interact with Clayton platform",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Davide Ungari <davide@clayton.io>",
   "bugs": {
     "url": "https://github.com/spaceheroes/sfdx-clayton/issues"

@@ -47,6 +47,8 @@ export const URLs = {
   oauth2Token: `${BASE_URL}/oauth2/token`,
   getProject: ({ workspace, project }: ProjectRelatedUrlParams): string =>
     `${BASE_URL}/api/workspaces/${workspace}/projects/${project}`,
+  getPullRequest: ({ workspace, project, pullRequest }: ProjectRelatedUrlParams & { pullRequest: string }): string =>
+    `${URLs.getProject({ project, workspace })}/pull-requests/${pullRequest}`,
   getScan: ({ workspace, project, scan }: ProjectRelatedUrlParams & { scan: string }): string =>
     `${URLs.getProject({ project, workspace })}/scans/${scan}?legacy_code=true`,
   getScans: ({ workspace, project }: ProjectRelatedUrlParams): string =>

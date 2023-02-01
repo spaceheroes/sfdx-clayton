@@ -5,7 +5,7 @@ import axios from 'axios';
 import { refreshToken } from '../../../utils/refreshToken';
 import { getErrorsIfMissingFlags, OAUTH_FLAGS_CONFIG, ProjectRelatedUrlParams, URLs } from '../../../config';
 import { Scan } from '../../../types';
-import { waitForScanStatus } from '../../../utils/waitForScanStatus';
+import { waitForRevisionScanStatus } from '../../../utils/waitForScanStatus';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@spaceheroes/sfdx-clayton', 'scan');
@@ -66,13 +66,19 @@ export default class ScanByBranch extends SfdxCommand {
         },
         { headers }
       );
-      const scanId = lauchScanResponse?.data.id;
-      ux.stopSpinner('done');
-      ux.logJson(lauchScanResponse?.data as any);
+
+      if (lauchScanResponse?.data.task.status !== 'ACCEPTED') {
+        ux.stopSpinner('failed');
+        return lauchScanResponse?.data;
+      } else {
+        ux.stopSpinner('done');
+        ux.logJson(lauchScanResponse?.data as any);
+      }
 
       if (this.flags.wait) {
         ux.startSpinner('Processing scan');
-        const scan = await waitForScanStatus(accessToken, scanId);
+        const scanId = lauchScanResponse?.data.id;
+        const scan = await waitForRevisionScanStatus(accessToken, this.flags, scanId);
         ux.stopSpinner('done');
         ux.logJson(scan as any);
         return scan;
@@ -80,6 +86,7 @@ export default class ScanByBranch extends SfdxCommand {
         return lauchScanResponse?.data;
       }
     } catch (error) {
+      ux.stopSpinner('failed');
       throw new SfError(`\n${error.code}: ${error.message}`);
     }
   }

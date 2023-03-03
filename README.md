@@ -1,11 +1,6 @@
 # sfdx-clayton
 
-SFDX plugin to interact with Clayton platform
-
-[![Version](https://img.shields.io/npm/v/sfdx-clayton.svg)](https://npmjs.org/package/sfdx-clayton)
-[![Known Vulnerabilities](https://snyk.io/test/github/spaceheroes/sfdx-clayton/badge.svg)](https://snyk.io/test/github/spaceheroes/sfdx-clayton)
-[![Downloads/week](https://img.shields.io/npm/dw/sfdx-clayton.svg)](https://npmjs.org/package/sfdx-clayton)
-[![License](https://img.shields.io/npm/l/sfdx-clayton.svg)](https://github.com/spaceheroes/sfdx-clayton/blob/master/package.json)
+SFDX plugin to interact with Clayton platform [![Known Vulnerabilities](https://snyk.io/test/github/spaceheroes/sfdx-clayton/badge.svg)](https://snyk.io/test/github/spaceheroes/sfdx-clayton)
 
 <!-- install -->
 <!-- usage -->

@@ -3,7 +3,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfError } from '@salesforce/core';
 import axios from 'axios';
 import { refreshToken } from '../../../utils/refreshToken';
-import { getErrorsIfMissingFlags, HEADERS, OAUTH_FLAGS_CONFIG, URLs } from '../../../config';
+import { COMMON_FLAGS, getErrorsIfMissingFlags, HEADERS, OAUTH_FLAGS_CONFIG, URLs } from '../../../config';
 import { Scan } from '../../../types';
 
 // Initialize Messages with the current plugin directory
@@ -16,11 +16,6 @@ export default class GetScan extends SfdxCommand {
   public static examples = messages.getMessage('commandExamples.get').split(os.EOL);
 
   protected static flagsConfig = {
-    workspace: flags.string({
-      char: 'w',
-      description: messages.getMessage('flagDescriptionWorkspaceId'),
-      required: true,
-    }),
     project: flags.string({
       char: 'p',
       description: messages.getMessage('flagDescriptionProjectId'),
@@ -31,6 +26,7 @@ export default class GetScan extends SfdxCommand {
       description: messages.getMessage('flagDescriptionScanId'),
       required: true,
     }),
+    ...COMMON_FLAGS,
     ...OAUTH_FLAGS_CONFIG,
   };
 

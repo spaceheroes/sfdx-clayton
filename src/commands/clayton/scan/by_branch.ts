@@ -3,7 +3,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfError } from '@salesforce/core';
 import axios from 'axios';
 import { refreshToken } from '../../../utils/refreshToken';
-import { getErrorsIfMissingFlags, OAUTH_FLAGS_CONFIG, ProjectRelatedUrlParams, URLs } from '../../../config';
+import { COMMON_FLAGS, getErrorsIfMissingFlags, OAUTH_FLAGS_CONFIG, ProjectRelatedUrlParams, URLs } from '../../../config';
 import { Scan } from '../../../types';
 import { waitForRevisionScanStatus } from '../../../utils/waitForScanStatus';
 
@@ -26,15 +26,11 @@ export default class ScanByBranch extends SfdxCommand {
       description: messages.getMessage('flagDescriptionProjectId'),
       required: true,
     }),
-    workspace: flags.string({
-      char: 'w',
-      description: messages.getMessage('flagDescriptionWorkspaceId'),
-      required: true,
-    }),
     wait: flags.string({
       description: messages.getMessage('flagDescriptionWait'),
       required: false,
     }),
+    ...COMMON_FLAGS,
     ...OAUTH_FLAGS_CONFIG,
   };
 
@@ -57,6 +53,9 @@ export default class ScanByBranch extends SfdxCommand {
       };
       const url = `${URLs.getScans({ ...this.flags } as ProjectRelatedUrlParams)}/by_branch`;
 
+
+
+
       ux.startSpinner('Launching scan');
       const lauchScanResponse = await axios.post<Scan>(
         url,
@@ -66,7 +65,6 @@ export default class ScanByBranch extends SfdxCommand {
         },
         { headers }
       );
-
       if (lauchScanResponse?.data.task.status !== 'ACCEPTED') {
         ux.stopSpinner('failed');
         return lauchScanResponse?.data;
@@ -85,6 +83,7 @@ export default class ScanByBranch extends SfdxCommand {
       } else {
         return lauchScanResponse?.data;
       }
+
     } catch (error) {
       ux.stopSpinner('failed');
       throw new SfError(`\n${error.code}: ${error.message}`);

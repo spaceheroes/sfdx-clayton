@@ -23,6 +23,15 @@ export const OAUTH_FLAGS_CONFIG = {
   }),
 };
 
+export const COMMON_FLAGS = {
+  workspace: flags.string({
+    char: 'w',
+    description: messages.getMessage('flagDescriptionWorkspaceId'),
+    required: true,
+    env: 'CLAYTON_WORKSPACE_DEFAULT'
+  }),
+}
+
 export function getErrorsIfMissingFlags(flags: any, config: any): string[] {
   const errors = [];
   for (const keyword in config) {

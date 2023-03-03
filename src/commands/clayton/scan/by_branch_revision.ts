@@ -3,7 +3,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfError } from '@salesforce/core';
 import axios from 'axios';
 import { refreshToken } from '../../../utils/refreshToken';
-import { getErrorsIfMissingFlags, OAUTH_FLAGS_CONFIG, ProjectRelatedUrlParams, URLs } from '../../../config';
+import { COMMON_FLAGS, getErrorsIfMissingFlags, OAUTH_FLAGS_CONFIG, ProjectRelatedUrlParams, URLs } from '../../../config';
 import { Scan } from '../../../types';
 import { waitForRevisionScanStatus } from '../../../utils/waitForScanStatus';
 
@@ -32,15 +32,11 @@ export default class ScanByBranchAndRevision extends SfdxCommand {
       description: messages.getMessage('flagDescriptionRevision'),
       required: true,
     }),
-    workspace: flags.string({
-      char: 'w',
-      description: messages.getMessage('flagDescriptionWorkspaceId'),
-      required: true,
-    }),
     wait: flags.string({
       description: messages.getMessage('flagDescriptionWait'),
       required: false,
     }),
+    ...COMMON_FLAGS,
     ...OAUTH_FLAGS_CONFIG,
   };
 
